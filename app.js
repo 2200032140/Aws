@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const {MongoClient} = require('mongodb');
 const fileupload = require('express-fileupload');
-const nodemailer = require('nodemailer');
 
 const app = express();
 app.use(express.json());
@@ -159,37 +158,6 @@ app.post('/uploaddp', async function(req, res){
         users = db.collection('users');
         data = await users.updateOne({emailid: fname},{$set : {imgurl: fname + '.jpg'}});
         conn.close();
-    }catch(err)
-    {
-        res.json(err).status(404);
-    }
-});
-
-//EMAIL NOTIFICATION
-app.post('/sendemail', async function(req, res){
-    try
-    {
-        var transport = nodemailer.createTransport({
-            service: "gmail",
-            host: "smtp.gmail.com",
-            port: 445,
-            secure: true,
-            auth:{user: "aijazhafeez1016@gmail.com", pass: "eeyvkghvgmnnjfyu"}
-        });
-
-        var emaildata = {
-            from: "aijazhafeez1016@gmail.com",
-            to: "kathirkadir@gmail.com",
-            subject: "Testing Email",
-            text: "This is a testing email message..."
-        };
-
-        transport.sendMail(emaildata, function(err, info){
-            if(err)
-                return res.json("Failed to sent Email");
-
-            res.json("Email sent successfully");
-        });
     }catch(err)
     {
         res.json(err).status(404);
